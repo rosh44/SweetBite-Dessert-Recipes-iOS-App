@@ -1,44 +1,84 @@
-//
-//  APIManager.swift
-//  SweetBite
-//
-//  Created by Roshni Soni on 11/15/23.
-//
+/**
+ * APIManager.swift
+ * SweetBite
+ *
+ * Created by Roshni Soni on 11/15/23.
+ *
+ * This file defines the `APIManager` class, which is responsible for making API requests
+ * to fetch dessert data and dessert details from an external API.
+*/
 
 import Foundation
 
 class APIManager {
-    func fetchDesserts(completion: @escaping (DessertList) -> Void) {
-        print("Inside fetchDesserts")
+    
+    /**
+     * Fetches a list of desserts from the external API.
+     *
+     * - Parameter completion: A closure that is called when the API request is complete.
+     *   It returns a `Result` type containing either a `DessertList` on success or an `Error` on failure.
+     */
+    func fetchDesserts(completion: @escaping (Result<DessertList, Error>) -> Void) {
         let url = URL(string: "https://themealdb.com/api/json/v1/1/filter.php?c=Dessert")!
         URLSession.shared.dataTask(with: url) { data, _, error in
-            guard let data = data, error == nil else {
-                print("fetchDessertDetail : empty data")
-                return
-            }
-            print("fetchDessertDetail data: ", data)
-            if let dessertList = try? JSONDecoder().decode(DessertList.self, from: data) {
-                print("fetchDessertDetail dessertList: ", dessertList)
+            if let error = error {
                 DispatchQueue.main.async {
-                    completion(dessertList)
+                    print("fetchDesserts >> Error:", error)
+                    completion(.failure(error))
                 }
-            }else {
-                print("Decoding failed")
+            }
+            else if let data = data {
+                do {
+                    let dessertList = try JSONDecoder().decode(DessertList.self, from: data)
+                    DispatchQueue.main.async {
+                        completion(.success(dessertList))
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        print("fetchDesserts >> Error:", error)
+                        completion(.failure(error))
+                    }
+                }
             }
         }.resume()
+        
     }
-
-    func fetchDessertDetail(dessertID: String, completion: @escaping (DessertDetail) -> Void) {
-        print("Inside fetchDessertDetail")
+    
+    /**
+     * Fetches details of a dessert by its ID from the external API.
+     *
+     * - Parameter dessertID: The ID of the dessert to fetch details for.
+     * - Parameter completion: A closure that is called when the API request is complete.
+     *   It returns a `Result` type containing either a `DessertDetail` on success or an `Error` on failure.
+     */
+    func fetchDessertDetail(dessertID: String, completion: @escaping (Result<DessertDetail, Error>) -> Void) {
         let url = URL(string: "https://themealdb.com/api/json/v1/1/lookup.php?i=\(dessertID)")!
         URLSession.shared.dataTask(with: url) { data, _, error in
-            guard let data = data, error == nil else { return }
-            if let dessertDetailResponse = try? JSONDecoder().decode([String: [DessertDetail]].self, from: data),
-                       let dessertDetail = dessertDetailResponse["meals"]?.first {
+            if let error = error {
+                DispatchQueue.main.async {
+                    print("fetchDessertDetail >> Error:", error)
+                    completion(.failure(error))
+                }
+            }
+            else if let data = data {
+                
+                do {
+                    let decoder = JSONDecoder()
+                    let dessertDetailResponse = try decoder.decode([String: [DessertDetail]].self, from: data)
+                    
+                    if let dessertDetail = dessertDetailResponse["meals"]?.first {
                         DispatchQueue.main.async {
-                            completion(dessertDetail)
+                            completion(.success(dessertDetail))
                         }
                     }
+                } catch {
+                    print("fetchDessertDetail >> Error:", error)
+                    DispatchQueue.main.async {
+                        completion(.failure(error))
+                    }
+                }
+                
+            }
         }.resume()
     }
 }

@@ -1,73 +1,97 @@
-//
-//  DessertDetailView.swift
-//  SweetBite
-//
-//  Created by Roshni Soni on 11/15/23.
-//
+/**
+* DessertDetailView.swift
+* SweetBite
+*
+* Created by Roshni Soni on 11/15/23.
+*
+* This file defines the `DessertDetailView` SwiftUI view, which is responsible for displaying details of a dessert.
+* It uses the `APIManager` to fetch  information about a dessert, including its name, instructions, image, and ingredients.
+* If there is failure in API call which fetches data, an error message is displayed to the user
+*/
 
 import SwiftUI
 
 struct DessertDetailView: View {
     let dessertID: String
-        @State private var dessertDetail: DessertDetail?
-        private let apiManager = APIManager()
-
-        var body: some View {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
-                    if let dessertDetail = dessertDetail {
-                       
-                        AsyncImage(url: dessertDetail.strMealThumb) { image in
-                            image.resizable()
-                                 .aspectRatio(contentMode: .fit)
-                        } placeholder: {
-                            Color.gray.aspectRatio(contentMode: .fit)
-                        }
-                        
-                        Text(dessertDetail.strMeal)
-                            .font(.title)
-                            .fontWeight(.bold)
-                        
-                        Text("Instructions:")
-                            .font(.headline)
-                        
-                        Text(dessertDetail.strInstructions)
-                            .fixedSize(horizontal: false, vertical: true) // Allow the text to wrap
-                        
-                        Divider()
-
-                        Text("Ingredients:")
-                            .font(.headline)
-
-                        // Dynamic view for ingredients
-                        ForEach(1..<21, id: \.self) { index in
-                            if let ingredient = ingredient(for: index), let measure = measure(for: index), !ingredient.isEmpty {
-                                Text("\(ingredient): \(measure)")
-                                    .fixedSize(horizontal: false, vertical: true) // Allow the text to wrap
-                            }
-                        }
-                    } else {
-                        Text("Loading...")
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+    @State private var dessertDetail: DessertDetail?
+    @State private var errorMessage: String?
+    private let apiManager = APIManager()
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 10) {
+                if let errorMessage = errorMessage {
+                    Text(errorMessage)
+                        .multilineTextAlignment(.center).padding()
+                }else
+                if let dessertDetail = dessertDetail {
+                    
+                    AsyncImage(url: dessertDetail.strMealThumb) { image in
+                        image.resizable()
+                            .aspectRatio(contentMode: .fit)
+                    } placeholder: {
+                        Color.gray.aspectRatio(contentMode: .fit)
                     }
+                    
+                    Text(dessertDetail.strMeal)
+                        .font(.title)
+                        .fontWeight(.bold)
+                    
+                    Text("Instructions:")
+                        .font(.headline)
+                    
+                    Text(dessertDetail.strInstructions)
+                        .fixedSize(horizontal: false, vertical: true)
+                    
+                    Divider()
+                    
+                    Text("Ingredients:")
+                        .font(.headline)
+                    
+                    // Dynamic view for ingredients and measures
+                    ForEach(1..<21, id: \.self) { index in
+                        if let ingredient = getIngredient(for: index),
+                            let measure = getMeasure(for: index),
+                            !ingredient.isEmpty {
+                            Text("\(ingredient): \(measure)")
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                    
+                } else {
+                    Text("Loading...\nIf this is taking too long, check your connection and try again")
+                        .multilineTextAlignment(.center).padding()
                 }
-                .padding([.horizontal, .bottom])
             }
-            .onAppear(perform: loadDessertDetail)
-            .navigationTitle("Dessert Recipe")
-            .navigationBarTitleDisplayMode(.inline)
+            .padding([.horizontal, .bottom])
         }
-
+        .onAppear(perform: loadDessertDetail)
+        .navigationBarTitle("Dessert Recipe", displayMode: .inline)
+    }
+    
+    /**
+     * This function is responsible for loading dessert details from the API using the `APIManager`.
+     * It handles success and failure cases and updates the view accordingly.
+     */
     private func loadDessertDetail() {
-        print("Inside loadDessertDetail")
-        apiManager.fetchDessertDetail(dessertID: dessertID) { fetchedDessertDetail in
-            dessertDetail = fetchedDessertDetail
+        apiManager.fetchDessertDetail(dessertID: dessertID) { result in
+            switch result {
+            case .success(let fetchedDessertDetail):
+                dessertDetail = fetchedDessertDetail
+            case .failure:
+                errorMessage = "Oops! Looks like we're having an issue connecting to our dessert recipe library. Could you please check your internet connection and try again."
+            }
         }
     }
-
-    private func ingredient(for index: Int) -> String? {
+    
+    /**
+     * Helper function to get the ingredient at a given index from the dessert detail.
+     * - Parameter index: The index of the ingredient.
+     * - Returns: The ingredient at the specified index.
+     */
+    private func getIngredient(for index: Int) -> String? {
         guard let detail = dessertDetail else { return nil }
-
+        
         switch index {
             case 1: return detail.strIngredient1
             case 2: return detail.strIngredient2
@@ -93,7 +117,12 @@ struct DessertDetailView: View {
         }
     }
 
-    private func measure(for index: Int) -> String? {
+    /**
+     * Helper function to get the measure at a given index from the dessert detail.
+     * - Parameter index: The index of the measure.
+     * - Returns: The measure at the specified index.
+     */
+    private func getMeasure(for index: Int) -> String? {
         guard let detail = dessertDetail else { return nil }
 
         switch index {

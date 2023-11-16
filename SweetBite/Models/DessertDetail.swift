@@ -1,9 +1,11 @@
-//
-//  DessertDetail.swift
-//  SweetBite
-//
-//  Created by Roshni Soni on 11/15/23.
-//
+/**
+ * DessertDetail.swift
+ * SweetBite
+ *
+ * Created by Roshni Soni on 11/15/23.
+ *
+ * This file defines the data model for detailed information about the dessert
+**/
 
 import Foundation
 
