@@ -14,15 +14,18 @@ SweetBite is a simple application built using Swift 5 and Xcode 15. It lets user
    <br/>
    <img src="screens/dessert_list.png" width="300"><br/>
 2. **Dessert Detail Screen**
-   <img src="screens/dessert_detail.png" width="300"><br/>
+   <br/>
+   <img src="screens/dessert_detail_1.png" width="300">
+   <img src="screens/dessert_detail_2.png" width="300"><br/>
 3. **Error Screen**
+   <br/>
    <img src="screens/error.png" width="300"><br/>
 
 ## API Integration
 This app utilizes two main endpoints from [TheMealDB API](https://themealdb.com/api.php):
 
-[https://themealdb.com/api/json/v1/1/filter.php?c=Dessert](https://themealdb.com/api/json/v1/1/filter.php?c=Dessert) for fetching the list of desserts.
-[https://themealdb.com/api/json/v1/1/lookup.php?i=MEAL_ID](https://themealdb.com/api/json/v1/1/lookup.php?i=MEAL_ID) for fetching details of a specific dessert.
+- [https://themealdb.com/api/json/v1/1/filter.php?c=Dessert](https://themealdb.com/api/json/v1/1/filter.php?c=Dessert) for fetching the list of desserts.
+- [https://themealdb.com/api/json/v1/1/lookup.php?i=MEAL_ID](https://themealdb.com/api/json/v1/1/lookup.php?i=MEAL_ID) for fetching details of a specific dessert.
 
 All data is filtered to exclude null or empty values for a cleaner user experience.
 
