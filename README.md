@@ -15,7 +15,7 @@ SweetBite is a simple application built using Swift 5 and Xcode 15. It lets user
    <img src="screens/dessert_list.png" width="300"><br/><br/>
 2. **Dessert Detail Screen**
    <br/><br/>
-   <img src="screens/dessert_detail_1.png" width="300"> <span/>
+   <img src="screens/dessert_detail_1.png" width="300"> &nbsp;&nbsp;
    <img src="screens/dessert_detail_2.png" width="300"><br/><br/>
 3. **Error Screen**
    <br/><br/>
