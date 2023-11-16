@@ -6,7 +6,7 @@
  *
  * This file defines the `APIManager` class, which is responsible for making API requests
  * to fetch dessert data and dessert details from an external API.
-*/
+ */
 
 import Foundation
 
@@ -22,22 +22,18 @@ class APIManager {
         let url = URL(string: "https://themealdb.com/api/json/v1/1/filter.php?c=Dessert")!
         URLSession.shared.dataTask(with: url) { data, _, error in
             if let error = error {
-                DispatchQueue.main.async {
-                    print("fetchDesserts >> Error:", error)
-                    completion(.failure(error))
-                }
+                print("fetchDesserts >> Error:", error)
+                completion(.failure(error))
+                
             }
             else if let data = data {
                 do {
                     let dessertList = try JSONDecoder().decode(DessertList.self, from: data)
-                    DispatchQueue.main.async {
-                        completion(.success(dessertList))
-                    }
+                    completion(.success(dessertList))
                 } catch {
-                    DispatchQueue.main.async {
-                        print("fetchDesserts >> Error:", error)
-                        completion(.failure(error))
-                    }
+                    print("fetchDesserts >> Error:", error)
+                    completion(.failure(error))
+                    
                 }
             }
         }.resume()
@@ -55,27 +51,24 @@ class APIManager {
         let url = URL(string: "https://themealdb.com/api/json/v1/1/lookup.php?i=\(dessertID)")!
         URLSession.shared.dataTask(with: url) { data, _, error in
             if let error = error {
-                DispatchQueue.main.async {
-                    print("fetchDessertDetail >> Error:", error)
-                    completion(.failure(error))
-                }
+                print("fetchDessertDetail >> Error:", error)
+                completion(.failure(error))
+                
             }
             else if let data = data {
                 
                 do {
                     let decoder = JSONDecoder()
                     let dessertDetailResponse = try decoder.decode([String: [DessertDetail]].self, from: data)
-                    
+        
                     if let dessertDetail = dessertDetailResponse["meals"]?.first {
-                        DispatchQueue.main.async {
-                            completion(.success(dessertDetail))
-                        }
+                        completion(.success(dessertDetail))
+                        
                     }
                 } catch {
                     print("fetchDessertDetail >> Error:", error)
-                    DispatchQueue.main.async {
-                        completion(.failure(error))
-                    }
+                    completion(.failure(error))
+                    
                 }
                 
             }

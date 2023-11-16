@@ -5,26 +5,24 @@
  * Created by Roshni Soni on 11/15/23.
  *
  * This file defines the `DessertListView` SwiftUI view, which is responsible for displaying a list of desserts to the user.
- * It uses the `APIManager` to fetch dessert data and presents it in a list format.
- * If there is failure in API call which fetches data, an error message is displayed to the user
+ * It uses the `DessertListViewModel` to manage and present the data.
+ *  In case of any errors during data fetching, an error message is displayed.
 **/
 
 import SwiftUI
 
 struct DessertListView: View {
-    @State private var desserts = [Dessert]()
-    @State private var errorMessage: String?
-    private let apiManager = APIManager()
-    
+    @StateObject private var viewModel = DessertListViewModel()
+
     var body: some View {
         NavigationView {
             VStack {
-                if let errorMessage = errorMessage {
+                if let errorMessage = viewModel.errorMessage {
                     Text(errorMessage)
                         .multilineTextAlignment(.center).padding()
                 }
                 else{
-                    List(desserts, id: \.idMeal) { dessert in
+                    List(viewModel.desserts, id: \.idMeal) { dessert in
                         NavigationLink(destination: DessertDetailView(dessertID: dessert.idMeal)) {
                             HStack {
                                 AsyncImage(url: dessert.strMealThumb) { image in
@@ -42,28 +40,12 @@ struct DessertListView: View {
                     .listStyle(PlainListStyle())
                 }
             }
-            .onAppear(perform: loadDesserts)
+            .onAppear(perform: viewModel.loadDesserts)
             .navigationBarTitle("SweetBite Desserts", displayMode: .inline)
             
         }
     }
     
-    /**
-     * This function is responsible for loading dessert data from the API using the `APIManager`.
-     * It handles success and failure cases and updates the view accordingly.
-     */
-    private func loadDesserts() {
-        errorMessage = nil
-        apiManager.fetchDesserts { result in
-            switch result {
-            case .success(let fetchedDesserts):
-                let sortedDesserts = fetchedDesserts.meals.sorted(by: { $0.strMeal < $1.strMeal })
-                desserts = sortedDesserts
-            case .failure:
-                errorMessage = "Oops! Looks like we're having an issue connecting to our dessert library. Could you please check your internet connection and try again."
-            }
-        }
-    }
 }
 
 #Preview {

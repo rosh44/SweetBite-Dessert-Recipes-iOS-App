@@ -5,26 +5,24 @@
 * Created by Roshni Soni on 11/15/23.
 *
 * This file defines the `DessertDetailView` SwiftUI view, which is responsible for displaying details of a dessert.
-* It uses the `APIManager` to fetch  information about a dessert, including its name, instructions, image, and ingredients.
-* If there is failure in API call which fetches data, an error message is displayed to the user
+* It uses the `DessertDetailViewModel` to manage and present the data.
+* In case of any errors during data fetching, an error message is displayed.
 */
 
 import SwiftUI
 
 struct DessertDetailView: View {
     let dessertID: String
-    @State private var dessertDetail: DessertDetail?
-    @State private var errorMessage: String?
-    private let apiManager = APIManager()
+    @StateObject private var viewModel = DessertDetailViewModel()
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 10) {
-                if let errorMessage = errorMessage {
+                if let errorMessage = viewModel.errorMessage {
                     Text(errorMessage)
                         .multilineTextAlignment(.center).padding()
                 }else
-                if let dessertDetail = dessertDetail {
+                if let dessertDetail = viewModel.dessertDetail {
                     
                     AsyncImage(url: dessertDetail.strMealThumb) { image in
                         image.resizable()
@@ -65,23 +63,10 @@ struct DessertDetailView: View {
             }
             .padding([.horizontal, .bottom])
         }
-        .onAppear(perform: loadDessertDetail)
-        .navigationBarTitle("Dessert Recipe", displayMode: .inline)
-    }
-    
-    /**
-     * This function is responsible for loading dessert details from the API using the `APIManager`.
-     * It handles success and failure cases and updates the view accordingly.
-     */
-    private func loadDessertDetail() {
-        apiManager.fetchDessertDetail(dessertID: dessertID) { result in
-            switch result {
-            case .success(let fetchedDessertDetail):
-                dessertDetail = fetchedDessertDetail
-            case .failure:
-                errorMessage = "Oops! Looks like we're having an issue connecting to our dessert recipe library. Could you please check your internet connection and try again."
-            }
+        .onAppear{
+            viewModel.loadDessertDetail(dessertID: dessertID)
         }
+        .navigationBarTitle("Dessert Recipe", displayMode: .inline)
     }
     
     /**
@@ -90,7 +75,7 @@ struct DessertDetailView: View {
      * - Returns: The ingredient at the specified index.
      */
     private func getIngredient(for index: Int) -> String? {
-        guard let detail = dessertDetail else { return nil }
+        guard let detail = viewModel.dessertDetail else { return nil }
         
         switch index {
             case 1: return detail.strIngredient1
@@ -123,7 +108,7 @@ struct DessertDetailView: View {
      * - Returns: The measure at the specified index.
      */
     private func getMeasure(for index: Int) -> String? {
-        guard let detail = dessertDetail else { return nil }
+        guard let detail = viewModel.dessertDetail else { return nil }
 
         switch index {
             case 1: return detail.strMeasure1

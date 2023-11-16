@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2306C0BB2B064DB8004E657B /* DessertListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306C0BA2B064DB8004E657B /* DessertListViewModel.swift */; };
+		2306C0BD2B064DC6004E657B /* DessertDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2306C0BC2B064DC6004E657B /* DessertDetailViewModel.swift */; };
 		239D98562B04AA080004B340 /* SweetBiteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239D98552B04AA080004B340 /* SweetBiteApp.swift */; };
 		239D98582B04AA080004B340 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239D98572B04AA080004B340 /* ContentView.swift */; };
 		239D985A2B04AA0B0004B340 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 239D98592B04AA0B0004B340 /* Assets.xcassets */; };
@@ -39,6 +41,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2306C0BA2B064DB8004E657B /* DessertListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DessertListViewModel.swift; sourceTree = "<group>"; };
+		2306C0BC2B064DC6004E657B /* DessertDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DessertDetailViewModel.swift; sourceTree = "<group>"; };
 		239D98522B04AA080004B340 /* SweetBite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SweetBite.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		239D98552B04AA080004B340 /* SweetBiteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SweetBiteApp.swift; sourceTree = "<group>"; };
 		239D98572B04AA080004B340 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -81,6 +85,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2306C0B92B064D9E004E657B /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2306C0BA2B064DB8004E657B /* DessertListViewModel.swift */,
+				2306C0BC2B064DC6004E657B /* DessertDetailViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		239D98492B04AA080004B340 = {
 			isa = PBXGroup;
 			children = (
@@ -104,9 +117,10 @@
 		239D98542B04AA080004B340 /* SweetBite */ = {
 			isa = PBXGroup;
 			children = (
+				2306C0B92B064D9E004E657B /* ViewModel */,
 				23EEC19D2B04CB730000ECAA /* Services */,
-				23EEC19C2B04C1460000ECAA /* Models */,
-				23EEC1972B04BDAC0000ECAA /* Views */,
+				23EEC19C2B04C1460000ECAA /* Model */,
+				23EEC1972B04BDAC0000ECAA /* View */,
 				239D98552B04AA080004B340 /* SweetBiteApp.swift */,
 				239D98592B04AA0B0004B340 /* Assets.xcassets */,
 				239D985B2B04AA0B0004B340 /* Preview Content */,
@@ -139,23 +153,23 @@
 			path = SweetBiteUITests;
 			sourceTree = "<group>";
 		};
-		23EEC1972B04BDAC0000ECAA /* Views */ = {
+		23EEC1972B04BDAC0000ECAA /* View */ = {
 			isa = PBXGroup;
 			children = (
 				239D98572B04AA080004B340 /* ContentView.swift */,
 				23EEC1982B04BF110000ECAA /* DessertListView.swift */,
 				23EEC19A2B04BF390000ECAA /* DessertDetailView.swift */,
 			);
-			path = Views;
+			path = View;
 			sourceTree = "<group>";
 		};
-		23EEC19C2B04C1460000ECAA /* Models */ = {
+		23EEC19C2B04C1460000ECAA /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				23EEC1A02B04CBE20000ECAA /* DessertList.swift */,
 				23EEC1A22B04CBF00000ECAA /* DessertDetail.swift */,
 			);
-			path = Models;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		23EEC19D2B04CB730000ECAA /* Services */ = {
@@ -301,8 +315,10 @@
 				23EEC19F2B04CBB00000ECAA /* APIManager.swift in Sources */,
 				23EEC19B2B04BF390000ECAA /* DessertDetailView.swift in Sources */,
 				23EEC1A12B04CBE20000ECAA /* DessertList.swift in Sources */,
+				2306C0BD2B064DC6004E657B /* DessertDetailViewModel.swift in Sources */,
 				23EEC1A32B04CBF00000ECAA /* DessertDetail.swift in Sources */,
 				239D98562B04AA080004B340 /* SweetBiteApp.swift in Sources */,
+				2306C0BB2B064DB8004E657B /* DessertListViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
